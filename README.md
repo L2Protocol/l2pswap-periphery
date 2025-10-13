@@ -1,11 +1,11 @@
-# Uniswap V2
+# L2PSwap
 
-[![Actions Status](https://github.com/Uniswap/uniswap-v2-periphery/workflows/CI/badge.svg)](https://github.com/Uniswap/uniswap-v2-periphery/actions)
-[![npm](https://img.shields.io/npm/v/@uniswap/v2-periphery?style=flat-square)](https://npmjs.com/package/@uniswap/v2-periphery)
+[![Actions Status](https://github.com/L2Protocol/l2pswap-periphery/workflows/CI/badge.svg)](https://github.com/L2Protocol/l2pswap-periphery/actions)
+[![npm](https://img.shields.io/npm/v/@l2pswap/periphery?style=flat-square)](https://npmjs.com/package/@l2pswap/periphery)
 
-In-depth documentation on Uniswap V2 is available at [uniswap.org](https://uniswap.org/docs).
+In-depth documentation on L2PSwap is available at [l2pswap.com](https://l2pswap.com/docs).
 
-The built contract artifacts can be browsed via [unpkg.com](https://unpkg.com/browse/@uniswap/v2-periphery@latest/).
+The built contract artifacts can be browsed via [unpkg.com](https://unpkg.com/browse/@l2pswap/periphery@latest/).
 
 # Local Development
 
