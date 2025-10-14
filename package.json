@@ -1,21 +1,38 @@
 {
   "name": "@l2pswap/periphery",
-  "version": "1.1.0-beta.0",
-  "description": "🎚 Peripheral smart contracts for interacting with L2PSwap V2",
+  "version": "1.0.0",
+  "description": "Peripheral smart contracts for interacting with L2PSwap",
   "engines": {
     "node": ">=10"
   },
-  "homepage": "https://l2pswap.com",
+  "homepage": "https://l2protocol.com",
+  "author": "L2Protocol",
   "repository": {
     "type": "git",
-    "url": "https://github.com/L2Protocol/l2pswap-periphery"
+    "url": "git+https://github.com/L2Protocol/l2pswap-periphery.git"
   },
+  "bugs": {
+    "url": "https://github.com/L2Protocol/l2pswap-periphery/issues"
+  },  
+  "keywords": [
+    "l2pswap",
+    "ethereum",
+    "l2protocol",
+    "periphery",
+    "l2p"
+  ],  
   "files": [
     "build",
     "contracts"
   ],
+  "engines": {
+    "node": ">=10"
+  },
+  "publishConfig": {
+    "access": "public"
+  },  
   "dependencies": {
-    "@l2pswap/lib": "4.0.1-alpha",
+    "@l2pswap/lib": "1.0.0",
     "@l2pswap/core": "1.0.0"
   },
   "devDependencies": {
