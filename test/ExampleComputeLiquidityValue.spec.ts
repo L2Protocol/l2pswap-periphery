@@ -11,14 +11,14 @@ import ExampleComputeLiquidityValue from '../build/ExampleComputeLiquidityValue.
 chai.use(solidity)
 
 const overrides = {
-  gasLimit: 9999999
+  gasLimit: 9999999,
 }
 
 describe('ExampleComputeLiquidityValue', () => {
   const provider = new MockProvider({
     hardfork: 'istanbul',
     mnemonic: 'horn horn horn horn horn horn horn horn horn horn horn horn',
-    gasLimit: 9999999
+    gasLimit: 9999999,
   })
   const [wallet] = provider.getWallets()
   const loadFixture = createFixtureLoader(provider, [wallet])
@@ -29,7 +29,7 @@ describe('ExampleComputeLiquidityValue', () => {
   let pair: Contract
   let computeLiquidityValue: Contract
   let router: Contract
-  beforeEach(async function() {
+  beforeEach(async function () {
     const fixture = await loadFixture(v2Fixture)
     token0 = fixture.token0
     token1 = fixture.token1
@@ -40,10 +40,10 @@ describe('ExampleComputeLiquidityValue', () => {
       wallet,
       ExampleComputeLiquidityValue,
       [fixture.factoryV2.address],
-      overrides
+      overrides,
     )
   })
-  
+
   beforeEach('mint some liquidity for the pair at 1:100 (100 shares minted)', async () => {
     await token0.transfer(pair.address, expandTo18Decimals(10))
     await token1.transfer(pair.address, expandTo18Decimals(1000))
@@ -60,7 +60,7 @@ describe('ExampleComputeLiquidityValue', () => {
       const [token0Amount, token1Amount] = await computeLiquidityValue.getLiquidityValue(
         token0.address,
         token1.address,
-        expandTo18Decimals(5)
+        expandTo18Decimals(5),
       )
       expect(token0Amount).to.eq('500000000000000000')
       expect(token1Amount).to.eq('50000000000000000000')
@@ -69,7 +69,7 @@ describe('ExampleComputeLiquidityValue', () => {
       const [token0Amount, token1Amount] = await computeLiquidityValue.getLiquidityValue(
         token0.address,
         token1.address,
-        expandTo18Decimals(7)
+        expandTo18Decimals(7),
       )
       expect(token0Amount).to.eq('700000000000000000')
       expect(token1Amount).to.eq('70000000000000000000')
@@ -83,12 +83,12 @@ describe('ExampleComputeLiquidityValue', () => {
         [token0.address, token1.address],
         wallet.address,
         MaxUint256,
-        overrides
+        overrides,
       )
       const [token0Amount, token1Amount] = await computeLiquidityValue.getLiquidityValue(
         token0.address,
         token1.address,
-        expandTo18Decimals(7)
+        expandTo18Decimals(7),
       )
       expect(token0Amount).to.eq('1400000000000000000')
       expect(token1Amount).to.eq('35052578868302453680')
@@ -115,12 +115,12 @@ describe('ExampleComputeLiquidityValue', () => {
           [token0.address, token1.address],
           wallet.address,
           MaxUint256,
-          overrides
+          overrides,
         )
         const [token0Amount, token1Amount] = await computeLiquidityValue.getLiquidityValue(
           token0.address,
           token1.address,
-          expandTo18Decimals(7)
+          expandTo18Decimals(7),
         )
         expect(token0Amount).to.eq('1399824934325735058')
         expect(token1Amount).to.eq('35048195651620807684')
@@ -134,7 +134,7 @@ describe('ExampleComputeLiquidityValue', () => {
         token0.address,
         token1.address,
         1,
-        400
+        400,
       )
       expect(reserveA).to.eq('5007516917298542016')
       expect(reserveB).to.eq('1999997739838173075192')
@@ -144,7 +144,7 @@ describe('ExampleComputeLiquidityValue', () => {
         token0.address,
         token1.address,
         1,
-        200
+        200,
       )
       expect(reserveA).to.eq('7081698338256310291')
       expect(reserveB).to.eq('1413330640570018326894')
@@ -154,7 +154,7 @@ describe('ExampleComputeLiquidityValue', () => {
         token0.address,
         token1.address,
         1,
-        100
+        100,
       )
       expect(reserveA).to.eq('10000000000000000000')
       expect(reserveB).to.eq('1000000000000000000000')
@@ -164,7 +164,7 @@ describe('ExampleComputeLiquidityValue', () => {
         token0.address,
         token1.address,
         1,
-        50
+        50,
       )
       expect(reserveA).to.eq('14133306405700183269')
       expect(reserveB).to.eq('708169833825631029041')
@@ -174,7 +174,7 @@ describe('ExampleComputeLiquidityValue', () => {
         token0.address,
         token1.address,
         1,
-        25
+        25,
       )
       expect(reserveA).to.eq('19999977398381730752')
       expect(reserveB).to.eq('500751691729854201595')
@@ -184,7 +184,7 @@ describe('ExampleComputeLiquidityValue', () => {
         token0.address,
         token1.address,
         25,
-        1
+        1,
       )
       expect(reserveA).to.eq('500721601459041764285')
       expect(reserveB).to.eq('20030067669194168064')
@@ -194,7 +194,7 @@ describe('ExampleComputeLiquidityValue', () => {
         token0.address,
         token1.address,
         MaxUint256.div(1000),
-        MaxUint256.div(1000)
+        MaxUint256.div(1000),
       )
       // diff of 30 bips
       expect(reserveA).to.eq('100120248075158403008')
@@ -210,7 +210,7 @@ describe('ExampleComputeLiquidityValue', () => {
           token1.address,
           1,
           105,
-          expandTo18Decimals(5)
+          expandTo18Decimals(5),
         )
         expect(token0Amount).to.eq('488683612488266114') // slightly less than 5% of 10, or 0.5
         expect(token1Amount).to.eq('51161327957205755422') // slightly more than 5% of 100, or 5
@@ -222,7 +222,7 @@ describe('ExampleComputeLiquidityValue', () => {
           token1.address,
           1,
           95,
-          expandTo18Decimals(5)
+          expandTo18Decimals(5),
         )
         expect(token0Amount).to.eq('512255881944227034') // slightly more than 5% of 10, or 0.5
         expect(token1Amount).to.eq('48807237571060645526') // slightly less than 5% of 100, or 5
@@ -234,7 +234,7 @@ describe('ExampleComputeLiquidityValue', () => {
           token1.address,
           1,
           100,
-          expandTo18Decimals(5)
+          expandTo18Decimals(5),
         )
         expect(token0Amount).to.eq('500000000000000000')
         expect(token1Amount).to.eq('50000000000000000000')
@@ -247,8 +247,8 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             100,
-            expandTo18Decimals(5)
-          )
+            expandTo18Decimals(5),
+          ),
         ).to.eq('12705')
       })
 
@@ -259,8 +259,8 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             105,
-            expandTo18Decimals(5)
-          )
+            expandTo18Decimals(5),
+          ),
         ).to.eq('13478')
       })
 
@@ -271,8 +271,8 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             95,
-            expandTo18Decimals(5)
-          )
+            expandTo18Decimals(5),
+          ),
         ).to.eq('13523')
       })
 
@@ -285,7 +285,7 @@ describe('ExampleComputeLiquidityValue', () => {
             [token0.address, token1.address],
             wallet.address,
             MaxUint256,
-            overrides
+            overrides,
           )
           const [reserve0, reserve1] = await pair.getReserves()
           expect(reserve0).to.eq('20000000000000000000')
@@ -298,7 +298,7 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             25,
-            expandTo18Decimals(5)
+            expandTo18Decimals(5),
           )
 
           expect(token0Amount).to.eq('1000000000000000000')
@@ -311,7 +311,7 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             100,
-            expandTo18Decimals(5)
+            expandTo18Decimals(5),
           )
 
           expect(token0Amount).to.eq('501127678536722155')
@@ -340,7 +340,7 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             105,
-            expandTo18Decimals(5)
+            expandTo18Decimals(5),
           )
           expect(token0Amount).to.eq('488680839243189328') // slightly less than 5% of 10, or 0.5
           expect(token1Amount).to.eq('51161037620273529068') // slightly more than 5% of 100, or 5
@@ -352,7 +352,7 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             95,
-            expandTo18Decimals(5)
+            expandTo18Decimals(5),
           )
           expect(token0Amount).to.eq('512252817918759166') // slightly more than 5% of 10, or 0.5
           expect(token1Amount).to.eq('48806945633721895174') // slightly less than 5% of 100, or 5
@@ -364,7 +364,7 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             100,
-            expandTo18Decimals(5)
+            expandTo18Decimals(5),
           )
           expect(token0Amount).to.eq('500000000000000000')
           expect(token1Amount).to.eq('50000000000000000000')
@@ -378,8 +378,8 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             100,
-            expandTo18Decimals(5)
-          )
+            expandTo18Decimals(5),
+          ),
         ).to.eq('16938')
       })
 
@@ -390,8 +390,8 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             105,
-            expandTo18Decimals(5)
-          )
+            expandTo18Decimals(5),
+          ),
         ).to.eq('18475')
       })
 
@@ -402,8 +402,8 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             95,
-            expandTo18Decimals(5)
-          )
+            expandTo18Decimals(5),
+          ),
         ).to.eq('18406')
       })
 
@@ -416,7 +416,7 @@ describe('ExampleComputeLiquidityValue', () => {
             [token0.address, token1.address],
             wallet.address,
             MaxUint256,
-            overrides
+            overrides,
           )
           const [reserve0, reserve1] = await pair.getReserves()
           expect(reserve0).to.eq('40000000000000000000')
@@ -429,7 +429,7 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             25,
-            expandTo18Decimals(5)
+            expandTo18Decimals(5),
           )
 
           expect(token0Amount).to.eq('999874953089810756')
@@ -442,7 +442,7 @@ describe('ExampleComputeLiquidityValue', () => {
             token1.address,
             1,
             100,
-            expandTo18Decimals(5)
+            expandTo18Decimals(5),
           )
 
           expect(token0Amount).to.eq('501002443792372662')

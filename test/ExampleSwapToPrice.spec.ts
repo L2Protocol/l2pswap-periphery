@@ -12,14 +12,14 @@ import ExampleSwapToPrice from '../build/ExampleSwapToPrice.json'
 chai.use(solidity)
 
 const overrides = {
-  gasLimit: 9999999
+  gasLimit: 9999999,
 }
 
 describe('ExampleSwapToPrice', () => {
   const provider = new MockProvider({
     hardfork: 'istanbul',
     mnemonic: 'horn horn horn horn horn horn horn horn horn horn horn horn',
-    gasLimit: 9999999
+    gasLimit: 9999999,
   })
   const [wallet] = provider.getWallets()
   const loadFixture = createFixtureLoader(provider, [wallet])
@@ -29,7 +29,7 @@ describe('ExampleSwapToPrice', () => {
   let pair: Contract
   let swapToPriceExample: Contract
   let router: Contract
-  beforeEach(async function() {
+  beforeEach(async function () {
     const fixture = await loadFixture(v2Fixture)
     token0 = fixture.token0
     token1 = fixture.token1
@@ -39,7 +39,7 @@ describe('ExampleSwapToPrice', () => {
       wallet,
       ExampleSwapToPrice,
       [fixture.factoryV2.address, fixture.router.address],
-      overrides
+      overrides,
     )
   })
 
@@ -69,8 +69,8 @@ describe('ExampleSwapToPrice', () => {
           MaxUint256,
           MaxUint256,
           wallet.address,
-          MaxUint256
-        )
+          MaxUint256,
+        ),
       ).to.be.revertedWith('ExampleSwapToPrice: ZERO_PRICE')
       await expect(
         swapToPriceExample.swapToPrice(
@@ -81,8 +81,8 @@ describe('ExampleSwapToPrice', () => {
           MaxUint256,
           MaxUint256,
           wallet.address,
-          MaxUint256
-        )
+          MaxUint256,
+        ),
       ).to.be.revertedWith('ExampleSwapToPrice: ZERO_PRICE')
       await expect(
         swapToPriceExample.swapToPrice(
@@ -93,14 +93,14 @@ describe('ExampleSwapToPrice', () => {
           MaxUint256,
           MaxUint256,
           wallet.address,
-          MaxUint256
-        )
+          MaxUint256,
+        ),
       ).to.be.revertedWith('ExampleSwapToPrice: ZERO_PRICE')
     })
 
     it('requires non-zero max spend', async () => {
       await expect(
-        swapToPriceExample.swapToPrice(token0.address, token1.address, 1, 100, 0, 0, wallet.address, MaxUint256)
+        swapToPriceExample.swapToPrice(token0.address, token1.address, 1, 100, 0, 0, wallet.address, MaxUint256),
       ).to.be.revertedWith('ExampleSwapToPrice: ZERO_SPEND')
     })
 
@@ -115,8 +115,8 @@ describe('ExampleSwapToPrice', () => {
           MaxUint256,
           wallet.address,
           MaxUint256,
-          overrides
-        )
+          overrides,
+        ),
       )
         // (1e19 + 526682316179835569) : (1e21 - 49890467170695440744) ~= 1:90
         .to.emit(token0, 'Transfer')
@@ -140,8 +140,8 @@ describe('ExampleSwapToPrice', () => {
           MaxUint256,
           wallet.address,
           MaxUint256,
-          overrides
-        )
+          overrides,
+        ),
       )
         // (1e21 + 47376582963642643588) : (1e19 - 451039908682851138) ~= 1:110
         .to.emit(token1, 'Transfer')
@@ -165,8 +165,8 @@ describe('ExampleSwapToPrice', () => {
           MaxUint256,
           wallet.address,
           MaxUint256,
-          overrides
-        )
+          overrides,
+        ),
       )
         // (1e21 + 47376582963642643588) : (1e19 - 451039908682851138) ~= 1:110
         .to.emit(token1, 'Transfer')
@@ -189,7 +189,7 @@ describe('ExampleSwapToPrice', () => {
         MaxUint256,
         wallet.address,
         MaxUint256,
-        overrides
+        overrides,
       )
       const receipt = await tx.wait()
       expect(receipt.gasUsed).to.eq('115129')

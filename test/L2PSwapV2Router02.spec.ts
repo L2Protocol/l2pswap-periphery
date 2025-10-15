@@ -14,14 +14,14 @@ import { ecsign } from 'ethereumjs-util'
 chai.use(solidity)
 
 const overrides = {
-  gasLimit: 9999999
+  gasLimit: 9999999,
 }
 
 describe('L2PSwapV2Router02', () => {
   const provider = new MockProvider({
     hardfork: 'istanbul',
     mnemonic: 'horn horn horn horn horn horn horn horn horn horn horn horn',
-    gasLimit: 9999999
+    gasLimit: 9999999,
   })
   const [wallet] = provider.getWallets()
   const loadFixture = createFixtureLoader(provider, [wallet])
@@ -29,7 +29,7 @@ describe('L2PSwapV2Router02', () => {
   let token0: Contract
   let token1: Contract
   let router: Contract
-  beforeEach(async function() {
+  beforeEach(async function () {
     const fixture = await loadFixture(v2Fixture)
     token0 = fixture.token0
     token1 = fixture.token1
@@ -40,39 +40,39 @@ describe('L2PSwapV2Router02', () => {
     expect(await router.quote(bigNumberify(1), bigNumberify(100), bigNumberify(200))).to.eq(bigNumberify(2))
     expect(await router.quote(bigNumberify(2), bigNumberify(200), bigNumberify(100))).to.eq(bigNumberify(1))
     await expect(router.quote(bigNumberify(0), bigNumberify(100), bigNumberify(200))).to.be.revertedWith(
-      'L2PSwapV2Library: INSUFFICIENT_AMOUNT'
+      'L2PSwapV2Library: INSUFFICIENT_AMOUNT',
     )
     await expect(router.quote(bigNumberify(1), bigNumberify(0), bigNumberify(200))).to.be.revertedWith(
-      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY'
+      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY',
     )
     await expect(router.quote(bigNumberify(1), bigNumberify(100), bigNumberify(0))).to.be.revertedWith(
-      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY'
+      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY',
     )
   })
 
   it('getAmountOut', async () => {
     expect(await router.getAmountOut(bigNumberify(2), bigNumberify(100), bigNumberify(100))).to.eq(bigNumberify(1))
     await expect(router.getAmountOut(bigNumberify(0), bigNumberify(100), bigNumberify(100))).to.be.revertedWith(
-      'L2PSwapV2Library: INSUFFICIENT_INPUT_AMOUNT'
+      'L2PSwapV2Library: INSUFFICIENT_INPUT_AMOUNT',
     )
     await expect(router.getAmountOut(bigNumberify(2), bigNumberify(0), bigNumberify(100))).to.be.revertedWith(
-      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY'
+      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY',
     )
     await expect(router.getAmountOut(bigNumberify(2), bigNumberify(100), bigNumberify(0))).to.be.revertedWith(
-      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY'
+      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY',
     )
   })
 
   it('getAmountIn', async () => {
     expect(await router.getAmountIn(bigNumberify(1), bigNumberify(100), bigNumberify(100))).to.eq(bigNumberify(2))
     await expect(router.getAmountIn(bigNumberify(0), bigNumberify(100), bigNumberify(100))).to.be.revertedWith(
-      'L2PSwapV2Library: INSUFFICIENT_OUTPUT_AMOUNT'
+      'L2PSwapV2Library: INSUFFICIENT_OUTPUT_AMOUNT',
     )
     await expect(router.getAmountIn(bigNumberify(1), bigNumberify(0), bigNumberify(100))).to.be.revertedWith(
-      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY'
+      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY',
     )
     await expect(router.getAmountIn(bigNumberify(1), bigNumberify(100), bigNumberify(0))).to.be.revertedWith(
-      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY'
+      'L2PSwapV2Library: INSUFFICIENT_LIQUIDITY',
     )
   })
 
@@ -88,11 +88,11 @@ describe('L2PSwapV2Router02', () => {
       0,
       wallet.address,
       MaxUint256,
-      overrides
+      overrides,
     )
 
     await expect(router.getAmountsOut(bigNumberify(2), [token0.address])).to.be.revertedWith(
-      'L2PSwapV2Library: INVALID_PATH'
+      'L2PSwapV2Library: INVALID_PATH',
     )
     const path = [token0.address, token1.address]
     expect(await router.getAmountsOut(bigNumberify(2), path)).to.deep.eq([bigNumberify(2), bigNumberify(1)])
@@ -110,11 +110,11 @@ describe('L2PSwapV2Router02', () => {
       0,
       wallet.address,
       MaxUint256,
-      overrides
+      overrides,
     )
 
     await expect(router.getAmountsIn(bigNumberify(1), [token0.address])).to.be.revertedWith(
-      'L2PSwapV2Library: INVALID_PATH'
+      'L2PSwapV2Library: INVALID_PATH',
     )
     const path = [token0.address, token1.address]
     expect(await router.getAmountsIn(bigNumberify(1), path)).to.deep.eq([bigNumberify(2), bigNumberify(1)])
@@ -125,7 +125,7 @@ describe('fee-on-transfer tokens', () => {
   const provider = new MockProvider({
     hardfork: 'istanbul',
     mnemonic: 'horn horn horn horn horn horn horn horn horn horn horn horn',
-    gasLimit: 9999999
+    gasLimit: 9999999,
   })
   const [wallet] = provider.getWallets()
   const loadFixture = createFixtureLoader(provider, [wallet])
@@ -134,7 +134,7 @@ describe('fee-on-transfer tokens', () => {
   let WETH: Contract
   let router: Contract
   let pair: Contract
-  beforeEach(async function() {
+  beforeEach(async function () {
     const fixture = await loadFixture(v2Fixture)
 
     WETH = fixture.WETH
@@ -148,7 +148,7 @@ describe('fee-on-transfer tokens', () => {
     pair = new Contract(pairAddress, JSON.stringify(IL2PSwapV2Pair.abi), provider).connect(wallet)
   })
 
-  afterEach(async function() {
+  afterEach(async function () {
     expect(await provider.getBalance(router.address)).to.eq(0)
   })
 
@@ -156,7 +156,7 @@ describe('fee-on-transfer tokens', () => {
     await DTT.approve(router.address, MaxUint256)
     await router.addLiquidityETH(DTT.address, DTTAmount, DTTAmount, WETHAmount, wallet.address, MaxUint256, {
       ...overrides,
-      value: WETHAmount
+      value: WETHAmount,
     })
   }
 
@@ -180,14 +180,12 @@ describe('fee-on-transfer tokens', () => {
       WETHExpected,
       wallet.address,
       MaxUint256,
-      overrides
+      overrides,
     )
   })
 
   it('removeLiquidityETHWithPermitSupportingFeeOnTransferTokens', async () => {
-    const DTTAmount = expandTo18Decimals(1)
-      .mul(100)
-      .div(99)
+    const DTTAmount = expandTo18Decimals(1).mul(100).div(99)
     const ETHAmount = expandTo18Decimals(4)
     await addLiquidity(DTTAmount, ETHAmount)
 
@@ -198,7 +196,7 @@ describe('fee-on-transfer tokens', () => {
       pair,
       { owner: wallet.address, spender: router.address, value: expectedLiquidity.sub(MINIMUM_LIQUIDITY) },
       nonce,
-      MaxUint256
+      MaxUint256,
     )
     const { v, r, s } = ecsign(Buffer.from(digest.slice(2), 'hex'), Buffer.from(wallet.privateKey.slice(2), 'hex'))
 
@@ -221,14 +219,12 @@ describe('fee-on-transfer tokens', () => {
       v,
       r,
       s,
-      overrides
+      overrides,
     )
   })
 
   describe('swapExactTokensForTokensSupportingFeeOnTransferTokens', () => {
-    const DTTAmount = expandTo18Decimals(5)
-      .mul(100)
-      .div(99)
+    const DTTAmount = expandTo18Decimals(5).mul(100).div(99)
     const ETHAmount = expandTo18Decimals(10)
     const amountIn = expandTo18Decimals(1)
 
@@ -245,7 +241,7 @@ describe('fee-on-transfer tokens', () => {
         [DTT.address, WETH.address],
         wallet.address,
         MaxUint256,
-        overrides
+        overrides,
       )
     })
 
@@ -260,16 +256,14 @@ describe('fee-on-transfer tokens', () => {
         [WETH.address, DTT.address],
         wallet.address,
         MaxUint256,
-        overrides
+        overrides,
       )
     })
   })
 
   // ETH -> DTT
   it('swapExactETHForTokensSupportingFeeOnTransferTokens', async () => {
-    const DTTAmount = expandTo18Decimals(10)
-      .mul(100)
-      .div(99)
+    const DTTAmount = expandTo18Decimals(10).mul(100).div(99)
     const ETHAmount = expandTo18Decimals(5)
     const swapAmount = expandTo18Decimals(1)
     await addLiquidity(DTTAmount, ETHAmount)
@@ -281,16 +275,14 @@ describe('fee-on-transfer tokens', () => {
       MaxUint256,
       {
         ...overrides,
-        value: swapAmount
-      }
+        value: swapAmount,
+      },
     )
   })
 
   // DTT -> ETH
   it('swapExactTokensForETHSupportingFeeOnTransferTokens', async () => {
-    const DTTAmount = expandTo18Decimals(5)
-      .mul(100)
-      .div(99)
+    const DTTAmount = expandTo18Decimals(5).mul(100).div(99)
     const ETHAmount = expandTo18Decimals(10)
     const swapAmount = expandTo18Decimals(1)
 
@@ -303,7 +295,7 @@ describe('fee-on-transfer tokens', () => {
       [DTT.address, WETH.address],
       wallet.address,
       MaxUint256,
-      overrides
+      overrides,
     )
   })
 })
@@ -312,7 +304,7 @@ describe('fee-on-transfer tokens: reloaded', () => {
   const provider = new MockProvider({
     hardfork: 'istanbul',
     mnemonic: 'horn horn horn horn horn horn horn horn horn horn horn horn',
-    gasLimit: 9999999
+    gasLimit: 9999999,
   })
   const [wallet] = provider.getWallets()
   const loadFixture = createFixtureLoader(provider, [wallet])
@@ -320,7 +312,7 @@ describe('fee-on-transfer tokens: reloaded', () => {
   let DTT: Contract
   let DTT2: Contract
   let router: Contract
-  beforeEach(async function() {
+  beforeEach(async function () {
     const fixture = await loadFixture(v2Fixture)
 
     router = fixture.router02
@@ -333,7 +325,7 @@ describe('fee-on-transfer tokens: reloaded', () => {
     const pairAddress = await fixture.factoryV2.getPair(DTT.address, DTT2.address)
   })
 
-  afterEach(async function() {
+  afterEach(async function () {
     expect(await provider.getBalance(router.address)).to.eq(0)
   })
 
@@ -349,14 +341,12 @@ describe('fee-on-transfer tokens: reloaded', () => {
       DTT2Amount,
       wallet.address,
       MaxUint256,
-      overrides
+      overrides,
     )
   }
 
   describe('swapExactTokensForTokensSupportingFeeOnTransferTokens', () => {
-    const DTTAmount = expandTo18Decimals(5)
-      .mul(100)
-      .div(99)
+    const DTTAmount = expandTo18Decimals(5).mul(100).div(99)
     const DTT2Amount = expandTo18Decimals(5)
     const amountIn = expandTo18Decimals(1)
 
@@ -373,7 +363,7 @@ describe('fee-on-transfer tokens: reloaded', () => {
         [DTT.address, DTT2.address],
         wallet.address,
         MaxUint256,
-        overrides
+        overrides,
       )
     })
   })

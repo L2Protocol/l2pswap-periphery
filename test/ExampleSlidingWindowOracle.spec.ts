@@ -11,7 +11,7 @@ import ExampleSlidingWindowOracle from '../build/ExampleSlidingWindowOracle.json
 chai.use(solidity)
 
 const overrides = {
-  gasLimit: 9999999
+  gasLimit: 9999999,
 }
 
 const defaultToken0Amount = expandTo18Decimals(5)
@@ -21,7 +21,7 @@ describe('ExampleSlidingWindowOracle', () => {
   const provider = new MockProvider({
     hardfork: 'istanbul',
     mnemonic: 'horn horn horn horn horn horn horn horn horn horn horn horn',
-    gasLimit: 9999999
+    gasLimit: 9999999,
   })
   const [wallet] = provider.getWallets()
   const loadFixture = createFixtureLoader(provider, [wallet])
@@ -44,7 +44,7 @@ describe('ExampleSlidingWindowOracle', () => {
   function observationIndexOf(
     timestamp: number,
     windowSize: number = defaultWindowSize,
-    granularity: number = defaultGranularity
+    granularity: number = defaultGranularity,
   ): number {
     const periodSize = Math.floor(windowSize / granularity)
     const epochPeriod = Math.floor(timestamp / periodSize)
@@ -55,7 +55,7 @@ describe('ExampleSlidingWindowOracle', () => {
     return deployContract(wallet, ExampleSlidingWindowOracle, [factory.address, windowSize, granularity], overrides)
   }
 
-  beforeEach('deploy fixture', async function() {
+  beforeEach('deploy fixture', async function () {
     const fixture = await loadFixture(v2Fixture)
 
     token0 = fixture.token0
@@ -80,7 +80,7 @@ describe('ExampleSlidingWindowOracle', () => {
 
   it('requires windowSize to be evenly divisible by granularity', async () => {
     await expect(deployOracle(defaultWindowSize - 1, defaultGranularity)).to.be.revertedWith(
-      'SlidingWindowOracle: WINDOW_NOT_EVENLY_DIVISIBLE'
+      'SlidingWindowOracle: WINDOW_NOT_EVENLY_DIVISIBLE',
     )
   })
 
@@ -126,7 +126,7 @@ describe('ExampleSlidingWindowOracle', () => {
 
     beforeEach(
       'deploy oracle',
-      async () => (slidingWindowOracle = await deployOracle(defaultWindowSize, defaultGranularity))
+      async () => (slidingWindowOracle = await deployOracle(defaultWindowSize, defaultGranularity)),
     )
 
     beforeEach('add default liquidity', () => addLiquidity())
@@ -135,17 +135,17 @@ describe('ExampleSlidingWindowOracle', () => {
       await slidingWindowOracle.update(token0.address, token1.address, overrides)
     })
 
-	let expectedBlockTime = startTime - 1;
-    it('sets the appropriate epoch slot', async () => {	
-	  expectedBlockTime++;
-	  
+    let expectedBlockTime = startTime - 1
+    it('sets the appropriate epoch slot', async () => {
+      expectedBlockTime++
+
       const blockTimestamp = (await pair.getReserves())[2]
       expect(blockTimestamp).to.eq(expectedBlockTime)
       await slidingWindowOracle.update(token0.address, token1.address, overrides)
       expect(await slidingWindowOracle.pairObservations(pair.address, observationIndexOf(blockTimestamp))).to.deep.eq([
         bigNumberify(blockTimestamp),
         await pair.price0CumulativeLast(),
-        await pair.price1CumulativeLast()
+        await pair.price1CumulativeLast(),
       ])
     }).retries(2) // we may have slight differences between pair blockTimestamp and the expected timestamp
     // because the previous block timestamp may differ from the current block timestamp by 1 second
@@ -192,7 +192,7 @@ describe('ExampleSlidingWindowOracle', () => {
 
     beforeEach(
       'deploy oracle',
-      async () => (slidingWindowOracle = await deployOracle(defaultWindowSize, defaultGranularity))
+      async () => (slidingWindowOracle = await deployOracle(defaultWindowSize, defaultGranularity)),
     )
 
     // must come after setting time to 0 for correct cumulative price computations in the pair
@@ -201,7 +201,7 @@ describe('ExampleSlidingWindowOracle', () => {
     it('fails if previous bucket not set', async () => {
       await slidingWindowOracle.update(token0.address, token1.address, overrides)
       await expect(slidingWindowOracle.consult(token0.address, 0, token1.address)).to.be.revertedWith(
-        'SlidingWindowOracle: MISSING_HISTORICAL_OBSERVATION'
+        'SlidingWindowOracle: MISSING_HISTORICAL_OBSERVATION',
       )
     })
 
@@ -224,16 +224,16 @@ describe('ExampleSlidingWindowOracle', () => {
 
       it('has cumulative price in previous bucket', async () => {
         expect(
-          await slidingWindowOracle.pairObservations(pair.address, observationIndexOf(previousBlockTimestamp))
+          await slidingWindowOracle.pairObservations(pair.address, observationIndexOf(previousBlockTimestamp)),
         ).to.deep.eq([bigNumberify(previousBlockTimestamp), previousCumulativePrices[0], previousCumulativePrices[1]])
       }).retries(5) // test flaky because timestamps aren't mocked
 
       it('has cumulative price in current bucket', async () => {
         const timeElapsed = blockTimestamp - previousBlockTimestamp
         const prices = encodePrice(defaultToken0Amount, defaultToken1Amount)
-        expect(
-          await slidingWindowOracle.pairObservations(pair.address, observationIndexOf(blockTimestamp))
-        ).to.deep.eq([bigNumberify(blockTimestamp), prices[0].mul(timeElapsed), prices[1].mul(timeElapsed)])
+        expect(await slidingWindowOracle.pairObservations(pair.address, observationIndexOf(blockTimestamp))).to.deep.eq(
+          [bigNumberify(blockTimestamp), prices[0].mul(timeElapsed), prices[1].mul(timeElapsed)],
+        )
       }).retries(5) // test flaky because timestamps aren't mocked
 
       it('provides the current ratio in consult token0', async () => {
