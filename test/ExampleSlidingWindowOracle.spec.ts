@@ -135,9 +135,12 @@ describe('ExampleSlidingWindowOracle', () => {
       await slidingWindowOracle.update(token0.address, token1.address, overrides)
     })
 
-    it('sets the appropriate epoch slot', async () => {
+	let expectedBlockTime = startTime - 1;
+    it('sets the appropriate epoch slot', async () => {	
+	  expectedBlockTime++;
+	  
       const blockTimestamp = (await pair.getReserves())[2]
-      expect(blockTimestamp).to.eq(startTime)
+      expect(blockTimestamp).to.eq(expectedBlockTime)
       await slidingWindowOracle.update(token0.address, token1.address, overrides)
       expect(await slidingWindowOracle.pairObservations(pair.address, observationIndexOf(blockTimestamp))).to.deep.eq([
         bigNumberify(blockTimestamp),

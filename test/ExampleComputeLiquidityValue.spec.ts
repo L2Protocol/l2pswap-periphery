@@ -43,7 +43,7 @@ describe('ExampleComputeLiquidityValue', () => {
       overrides
     )
   })
-
+  
   beforeEach('mint some liquidity for the pair at 1:100 (100 shares minted)', async () => {
     await token0.transfer(pair.address, expandTo18Decimals(10))
     await token1.transfer(pair.address, expandTo18Decimals(1000))

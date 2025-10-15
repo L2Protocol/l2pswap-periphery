@@ -21,7 +21,7 @@ library L2PSwapV2Library {
                 hex'ff',
                 factory,
                 keccak256(abi.encodePacked(token0, token1)),
-                hex'78aafb39be37d911b1be895cfb379a6d346e9ccfbf81b819df41ccbf489735a4' // init code hash
+                hex'd26279e50634822e591ff8b679a0a24b313df639ab2a35b8deab526fc4d573f8' // init code hash
             ))));
     }
 
